@@ -37,6 +37,14 @@ The project is organized into a monorepo using `pnpm` workspaces.
     -   `index.ts`: Application entry point.
 -   `routes/`: This directory uses a file-based routing system.
 
+### Frontend Structure (`apps/frontend`)
+
+-   `src/`: Source code for the frontend application.
+    -   `components/`: Reusable React components used by the routes.
+    -   `routes/`: Route definitions using TanStack Router's file-based routing system.
+    -   `main.tsx`: The main application entry point, which sets up the Mantine provider and TanStack Router.
+    -   `tanstack-router.d.ts`: TypeScript declarations for extending the router's metadata capabilities.
+
 ## File-based Routing
 
 The backend uses a convention-based routing system that automatically maps file and directory structures in `apps/backend/src/routes` to API endpoints.

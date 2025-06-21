@@ -6,6 +6,13 @@ Welcome to Anansys, a modular, AI-powered narrative game engine.
 
 Anansys is designed to provide a robust platform for creating dynamic, choice-driven narrative games. It features a modern backend built with Node.js, Fastify, and Drizzle ORM, and is designed to be paired with a flexible frontend (e.g., React).
 
+## What's Anansys?
+Anansys is inspired by Anansi, the West African trickster god and master storyteller. In folklore, Anansi is known for his cleverness, love of riddles, and ability to weave stories—often using his wit to outsmart gods and kings alike.
+We adapted the name to Anansys to reflect two things:
+
+- Anansi’s mythic roots in narrative and wisdom
+- The idea of a system (sys) that powers rich, replayable storytelling
+
 ## Tech Stack
 
 -   **Backend**:

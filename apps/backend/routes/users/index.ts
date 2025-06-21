@@ -1,15 +1,12 @@
 import { RouteHandler } from "fastify";
+import { getAllUsers } from "../../src/services/user.service";
 
 /**
  * Handles GET requests to /users
- * Returns a list of users.
+ * Returns a list of users by calling the user service.
  */
 export const GET: RouteHandler = async (request, reply) => {
-  // In a real application, you would fetch this from a database
-  const users = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-  ];
+  const users = await getAllUsers();
   return users;
 };
 
@@ -18,8 +15,7 @@ export const GET: RouteHandler = async (request, reply) => {
  * Creates a new user.
  */
 export const POST: RouteHandler = async (request, reply) => {
-  // In a real application, you would save the new user to a database
-  // The request body would contain the user data
+  // In a real application, you would use a service to create the user
   const newUser = request.body;
   reply.code(201); // Created
   return { message: "User created successfully", user: newUser };

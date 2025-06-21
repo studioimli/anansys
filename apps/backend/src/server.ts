@@ -23,7 +23,7 @@ async function buildServer() {
   // Health check endpoint
   server.get("/health", async (request, reply) => {
     try {
-      const { getHealthStatus } = await import("./services/homeService")
+      const { getHealthStatus } = await import("./services/health.service")
       const healthData = await getHealthStatus()
       return healthData
     } catch (error) {

@@ -1,4 +1,5 @@
 import { RouteHandler } from "fastify";
+import { getUserById } from "../../../src/services/user.service";
 
 interface Params {
     id: string;
@@ -6,15 +7,16 @@ interface Params {
 
 /**
  * Handles GET requests to /users/:id
- * Returns a single user by their ID.
+ * Returns a single user by their ID by calling the user service.
  */
 export const GET: RouteHandler<{ Params: Params }> = async (request, reply) => {
     const { id } = request.params;
-    // In a real application, you would fetch this from a database
-    // and handle the case where the user is not found.
-    if (parseInt(id, 10) > 100) {
+    const user = await getUserById(id);
+
+    if (!user) {
         reply.code(404);
         return { error: "User not found" };
     }
-    return { id, name: `User ${id}` };
+
+    return user;
 }; 

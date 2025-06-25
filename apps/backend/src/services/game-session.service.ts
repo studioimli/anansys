@@ -3,10 +3,10 @@
  */
 
 interface GameSession {
-  id: string;
-  playerName: string;
-  currentScene: string;
-  lastUpdatedAt: string;
+  id: string
+  playerName: string
+  currentScene: string
+  lastUpdatedAt: string
 }
 
 /**
@@ -18,12 +18,12 @@ interface GameSession {
 export async function getPlayerSessionById(
   id: string,
 ): Promise<GameSession | null> {
-  console.log(`Fetching game session with ID: ${id}`);
+  console.log(`Fetching game session with ID: ${id}`)
 
   // Simulate a session not found for specific IDs for testing purposes
   if (id === "000" || id === "404") {
-    console.warn(`Session with ID: ${id} not found.`);
-    return null;
+    console.warn(`Session with ID: ${id} not found.`)
+    return null
   }
 
   // Simulate fetching a real session
@@ -32,8 +32,8 @@ export async function getPlayerSessionById(
     playerName: "Astra",
     currentScene: "TheCrossroads",
     lastUpdatedAt: new Date().toISOString(),
-  };
+  }
 
-  console.log("Session found:", session);
-  return session;
-} 
+  console.log("Session found:", session)
+  return session
+}

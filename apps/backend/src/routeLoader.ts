@@ -152,8 +152,7 @@ export async function loadRoutes(
             optionsToApply.schema &&
             (optionsToApply.schema as any).body
           ) {
-            const { body, ...schemaWithoutBody } =
-              optionsToApply.schema as any
+            const { body, ...schemaWithoutBody } = optionsToApply.schema as any
             optionsToApply = {
               ...optionsToApply,
               schema: schemaWithoutBody,
@@ -183,4 +182,4 @@ export async function loadRoutes(
       console.error(`Error loading route file ${filePath}:`, error)
     }
   }
-} 
+}

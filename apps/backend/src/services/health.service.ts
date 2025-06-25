@@ -7,4 +7,4 @@ export async function getHealthStatus() {
     status: "OK",
     timestamp: new Date().toISOString(),
   }
-} 
+}

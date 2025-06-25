@@ -2,6 +2,8 @@
 
 import fastify from "fastify"
 import { loadRoutes } from "./routeLoader"
+import cors from "@fastify/cors"
+import { loadConfig } from "./utils/config"
 
 /**
  * Build the Fastify server instance
@@ -52,7 +54,16 @@ async function buildServer() {
  * Start the server
  */
 async function start(): Promise<void> {
-  const server = await buildServer()
+  const config = loadConfig();
+
+  const allowedOrigins = config.parsed?.ALLOWED_ORIGINS?.split(",");
+
+  const server = (await buildServer()).register(cors, {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
 
   try {
     const address = await server.listen({

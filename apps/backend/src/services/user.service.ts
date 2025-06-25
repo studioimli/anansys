@@ -3,8 +3,8 @@
  */
 
 interface User {
-  id: number;
-  name: string;
+  id: number
+  name: string
 }
 
 /**
@@ -16,7 +16,7 @@ export async function getAllUsers(): Promise<User[]> {
   return [
     { id: 1, name: "Alice" },
     { id: 2, name: "Bob" },
-  ];
+  ]
 }
 
 /**
@@ -26,9 +26,9 @@ export async function getAllUsers(): Promise<User[]> {
  * @returns A promise that resolves to a user or null if not found.
  */
 export async function getUserById(id: string): Promise<User | null> {
-  const userId = parseInt(id, 10);
+  const userId = parseInt(id, 10)
   if (userId > 100) {
-    return null; // Simulate user not found
+    return null // Simulate user not found
   }
-  return { id: userId, name: `User ${userId}` };
-} 
+  return { id: userId, name: `User ${userId}` }
+}

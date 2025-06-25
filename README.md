@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/349b8db0-b64b-4f63-9d66-3fff559b8dda)
+![image 1](https://github.com/user-attachments/assets/92235494-9e9e-46ac-b5d9-185ada0f3ac6)
 
 # Anansys Narrative Game Engine
 

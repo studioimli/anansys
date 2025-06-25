@@ -1,26 +1,11 @@
-/**
- * APIs we need:
- * POST - /ai/gsm/create-session - will accept a json payload with the following fields:
- * 
-{
-  "setting": "Apartment Complex",
-  "suspectCount": 3,
-  "murderType": "Framed",
-  "twist": "None",
-  "conflictStructure": "Linear",
-  "killerSelectionLogic": "Based on Opportunity",
-  "victimArchetype": "Powerful",
-  "timeOfDay": "Morning",
-  "locationCount": "Small",
-  "difficultyLevel": "Easy"
-}
- * 
- */
-
 import { z } from "zod";
 import { openai } from "../../utils/config";
 import { generateText, Output } from "ai";
+import { GameState } from "./narrator";
 
+/**
+ * Payload for creating a game session
+ */
 export interface GameSessionPayload {
     setting: string;
     suspectCount: number;
@@ -34,11 +19,38 @@ export interface GameSessionPayload {
     difficultyLevel: string;
 }
 
+/**
+ * Schema for the output of the game state manager
+ */
 const outputSchema = z.object({
-    publicInfo: z.string(),
-    internalState: z.string()
+    publicInfo: z.object({
+        settingSummary: z.string(),
+        characters: z.array(z.object({
+            name: z.string(),
+            bio: z.string()
+        })),
+        initialEventSummary: z.string()
+    }),
+    internalState: z.object({
+        killer: z.string(),
+        motive: z.string(),
+        keyAlibis: z.record(z.string(), z.string()),
+        murderWeapon: z.string(),
+        timeline: z.record(z.string(), z.string()),
+        clues: z.array(z.object({
+            description: z.string(),
+            location: z.string()
+        })),
+        accomplice: z.string(),
+        thresholdForSolvable: z.number()
+    })
 })
 
+/**
+ * Creates a game session
+ * @param payload - The payload for creating a game session
+ * @returns The game state
+ */
 export async function createGameSession(payload: GameSessionPayload) {
 
     const systemPrompt = `You are the game state manager of a murder mystery simulator.
@@ -73,11 +85,21 @@ export async function createGameSession(payload: GameSessionPayload) {
     const { experimental_output } = await generateText({
         model: openai("gpt-4o-mini"),
         system: systemPrompt,
-        prompt: "Start the game",
-        temperature: 0.75,
+        prompt: "Create a game session",
+        temperature: 0.1, //Must be extremely low to ensure the game state is consistent
         maxTokens: 4000,
         experimental_output: Output.object({ schema: outputSchema })
     })
 
     return experimental_output;
+}
+
+/**
+ * Manages the game state
+ * @param gameState - The current game state
+ * @returns The updated game state
+ */
+export async function manageGameState(gameState: GameState) {
+    //TODO: Implement ai call to manage the game state
+    return gameState;
 }

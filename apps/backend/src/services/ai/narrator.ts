@@ -5,8 +5,33 @@ import { z } from "zod"
 
 
 export interface GameState {
-    publicInfo: string;
-    internalState: string;
+    /**
+     * Public information that the player can see
+     */
+    publicInfo: {
+        settingSummary: string;
+        characters: {
+            name: string;
+            bio: string;
+        }[];
+        initialEventSummary: string;
+    };
+    /**
+     * Internal state that the player cannot see
+     */
+    internalState: {
+        killer: string;
+        motive: string;
+        keyAlibis: Record<string, string>;
+        murderWeapon: string;
+        timeline: Record<string, string>;
+        clues: {
+            description: string;
+            location: string;
+        }[];
+        accomplice: string;
+        thresholdForSolvable: number;
+    };
 }
 
 const outputSchema = z.object({

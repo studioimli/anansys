@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/349b8db0-b64b-4f63-9d66-3fff559b8dda)
+
 # Anansys Narrative Game Engine
 
 Welcome to Anansys, a modular, AI-powered narrative game engine.

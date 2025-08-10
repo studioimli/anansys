@@ -65,6 +65,8 @@ jspm_packages/
 ehthumbs.db
 Thumbs.db 
 
-# Cursor rules
+# AI rules
 .cursorrules
 .cursor
+AGENTS.md
+CLAUDE.md

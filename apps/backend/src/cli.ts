@@ -14,31 +14,31 @@
  * ```
  */
 
-import ora from "ora";
-import chalk from "chalk";
-import inquirer from "inquirer";
-import { getPlayerSessionById } from "./services/game-session.service";
-import { getUserById, getAllUsers } from "./services/user.service";
+import ora from "ora"
+import chalk from "chalk"
+import inquirer from "inquirer"
+import { getPlayerSessionById } from "./services/game-session.service"
+import { getUserById, getAllUsers } from "./services/user.service"
 
 /**
  * Defines the structure for a CLI command.
  */
 interface Command {
-  name: string;
-  description: string;
+  name: string
+  description: string
   // If true, the command requires an argument (e.g., an ID)
-  requiresArg: boolean;
+  requiresArg: boolean
   // The service function to execute
-  action: (arg: string) => Promise<any>;
+  action: (arg: string) => Promise<any>
 }
 
 // A separate type for commands that don't need arguments
 type NoArgCommand = Omit<Command, "action" | "requiresArg"> & {
-  requiresArg: false;
-  action: () => Promise<any>;
-};
+  requiresArg: false
+  action: () => Promise<any>
+}
 
-type AnyCommand = Command | NoArgCommand;
+type AnyCommand = Command | NoArgCommand
 
 // Registry of all available CLI commands.
 const commands: AnyCommand[] = [
@@ -60,7 +60,7 @@ const commands: AnyCommand[] = [
     requiresArg: false,
     action: getAllUsers,
   },
-];
+]
 
 /**
  * Executes a specific command, handling spinners and results.
@@ -71,33 +71,33 @@ async function executeCommand(command: AnyCommand, arg?: string) {
   const spinner = ora({
     text: `Running command ${chalk.cyan(command.name)}...`,
     spinner: "dots",
-  }).start();
+  }).start()
 
   try {
     const result = command.requiresArg
       ? await (command as Command).action(arg!) // We validate arg exists before calling
-      : await (command as NoArgCommand).action();
+      : await (command as NoArgCommand).action()
 
     if (result) {
       spinner.succeed(
         `Command ${chalk.green(command.name)} finished successfully.`,
-      );
-      console.log(JSON.stringify(result, null, 2));
+      )
+      console.log(JSON.stringify(result, null, 2))
     } else {
       spinner.warn(
         `Command ${chalk.yellow(
           command.name,
         )} completed, but returned no result.`,
-      );
+      )
     }
   } catch (error) {
-    spinner.fail(`Command ${chalk.red(command.name)} failed.`);
+    spinner.fail(`Command ${chalk.red(command.name)} failed.`)
     if (error instanceof Error) {
-      console.error(chalk.red(error.message));
+      console.error(chalk.red(error.message))
     } else {
-      console.error(chalk.red("An unknown error occurred."), error);
+      console.error(chalk.red("An unknown error occurred."), error)
     }
-    process.exit(1);
+    process.exit(1)
   }
 }
 
@@ -105,29 +105,29 @@ async function executeCommand(command: AnyCommand, arg?: string) {
  * Starts the interactive CLI mode.
  */
 async function startInteractiveMode() {
-  console.log(chalk.bold.magenta("Welcome to the Anansys CLI!"));
-  console.log("You can run services directly without using the API.\n");
+  console.log(chalk.bold.magenta("Welcome to the Anansys CLI!"))
+  console.log("You can run services directly without using the API.\n")
 
   const { commandName } = await inquirer.prompt([
     {
       type: "list",
       name: "commandName",
       message: "Which command would you like to run?",
-      choices: commands.map(cmd => ({
+      choices: commands.map((cmd) => ({
         name: `${chalk.cyan(cmd.name)} - ${cmd.description}`,
         value: cmd.name,
       })),
     },
-  ]);
+  ])
 
-  const command = commands.find(cmd => cmd.name === commandName);
+  const command = commands.find((cmd) => cmd.name === commandName)
   if (!command) {
     // This should not happen with inquirer, but it's good practice
-    console.error(chalk.red("Invalid command selected."));
-    process.exit(1);
+    console.error(chalk.red("Invalid command selected."))
+    process.exit(1)
   }
 
-  let arg: string | undefined;
+  let arg: string | undefined
   if (command.requiresArg) {
     const { argument } = await inquirer.prompt([
       {
@@ -137,45 +137,45 @@ async function startInteractiveMode() {
         validate: (input: string) =>
           input ? true : "This value cannot be empty.",
       },
-    ]);
-    arg = argument;
+    ])
+    arg = argument
   }
 
-  await executeCommand(command, arg);
+  await executeCommand(command, arg)
 }
 
 /**
  * Main function to parse arguments and run the CLI.
  */
 async function main() {
-  const args = process.argv.slice(2);
-  const [commandName, arg] = args;
+  const args = process.argv.slice(2)
+  const [commandName, arg] = args
 
   if (!commandName) {
     // No command provided, so we start interactive mode
-    await startInteractiveMode();
+    await startInteractiveMode()
   } else {
     // Command provided, run non-interactively
-    const command = commands.find(cmd => cmd.name === commandName);
+    const command = commands.find((cmd) => cmd.name === commandName)
     if (!command) {
-      console.error(chalk.red(`Error: Command "${commandName}" not found.`));
+      console.error(chalk.red(`Error: Command "${commandName}" not found.`))
       console.log(
         `Available commands: ${chalk.cyan(
-          commands.map(cmd => cmd.name).join(", "),
+          commands.map((cmd) => cmd.name).join(", "),
         )}`,
-      );
-      process.exit(1);
+      )
+      process.exit(1)
     }
 
     if (command.requiresArg && !arg) {
       console.error(
         chalk.red(`Error: Missing argument for command "${command.name}".`),
-      );
-      process.exit(1);
+      )
+      process.exit(1)
     }
 
-    await executeCommand(command, arg);
+    await executeCommand(command, arg)
   }
 }
 
-main(); 
+main()
